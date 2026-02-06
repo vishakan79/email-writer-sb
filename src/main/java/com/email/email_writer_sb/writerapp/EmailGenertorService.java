@@ -12,16 +12,18 @@ import java.util.Map;
 public class EmailGenertorService {
 
     private final WebClient webClient;
+    private final String geminiUrl;
+    private final String geminiApiKey;
 
-    @Value("${gemini.api.url}")
-    private String geminiUrl;
-
-    @Value("${gemini.api.key}")
-    private String geminiApiKey;
-
-    // ✅ KEEP ONLY THIS CONSTRUCTOR
-    public EmailGenertorService(WebClient.Builder webClientBuilder) {
+    // ✅ ONLY THIS CONSTRUCTOR (CORRECT)
+    public EmailGenertorService(
+            WebClient.Builder webClientBuilder,
+            @Value("${GEMINI_URL}") String geminiUrl,
+            @Value("${GEMINI_KEY}") String geminiApiKey
+    ) {
         this.webClient = webClientBuilder.build();
+        this.geminiUrl = geminiUrl;
+        this.geminiApiKey = geminiApiKey;
     }
 
     public String generateEmailReply(EmailRequest emailRequest) {
@@ -39,7 +41,7 @@ public class EmailGenertorService {
         );
 
         String response = webClient.post()
-                .uri(geminiUrl+geminiApiKey)
+                .uri(geminiUrl + geminiApiKey)
                 .header("Content-Type", "application/json")
                 .bodyValue(requestBody)
                 .retrieve()
@@ -91,7 +93,6 @@ public class EmailGenertorService {
 
         prompt.append("\nOriginal email:\n");
         prompt.append(emailRequest.getEmailcontent());
-
         prompt.append("\n\nWrite the reply now.");
 
         return prompt.toString();
