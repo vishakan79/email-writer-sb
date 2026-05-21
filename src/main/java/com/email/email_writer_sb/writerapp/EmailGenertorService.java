@@ -15,7 +15,7 @@ public class EmailGenertorService {
     private final String geminiUrl;
     private final String geminiApiKey;
 
-    // ✅ ONLY THIS CONSTRUCTOR (CORRECT)
+    
     public EmailGenertorService(
             WebClient.Builder webClientBuilder,
             @Value("${GEMINI_URL}") String geminiUrl,
