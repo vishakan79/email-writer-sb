@@ -10,7 +10,7 @@ public class EmailGenertorController {
 
     private final EmailGenertorService emailGenertorService;
 
-    // ✅ MANUAL CONSTRUCTOR (Lombok replacement)
+    
     public EmailGenertorController(EmailGenertorService emailGenertorService) {
         this.emailGenertorService = emailGenertorService;
     }
