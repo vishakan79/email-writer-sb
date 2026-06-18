@@ -70,31 +70,38 @@ public class EmailGenertorService {
         }
     }
 
-    private String buildPrompt(EmailRequest emailRequest) {
-        StringBuilder prompt = new StringBuilder();
+   private String buildPrompt(EmailRequest emailRequest) {
+    StringBuilder prompt = new StringBuilder();
 
-        prompt.append("""
-                You are an expert email assistant.
-                
-                Write a clear, polite, and well-structured email reply.
-                Follow professional email standards:
-                - Proper greeting
-                - Clear body
-                - Polite closing
-                - Sign-off
-                
-                Do NOT include a subject line.
-                Do NOT repeat the original email.
-                """);
+    prompt.append("""
+            You are an expert email assistant.
 
-        if (emailRequest.getTone() != null && !emailRequest.getTone().isEmpty()) {
-            prompt.append("Use a ").append(emailRequest.getTone()).append(" tone.\n");
-        }
+            Your task is to generate a professional reply to the email provided below.
 
-        prompt.append("\nOriginal email:\n");
-        prompt.append(emailRequest.getEmailcontent());
-        prompt.append("\n\nWrite the reply now.");
+            Instructions:
+            - Reply ONLY to the email content between EMAIL START and EMAIL END.
+            - Do NOT reply to these instructions.
+            - Do NOT explain your reasoning.
+            - Do NOT repeat the original email.
+            - Do NOT include a subject line.
+            - Use a proper greeting, body, and closing.
+            - If the email content is unclear or incomplete, politely ask for clarification.
+            - Return only the email reply.
 
-        return prompt.toString();
+            """);
+
+    if (emailRequest.getTone() != null && !emailRequest.getTone().trim().isEmpty()) {
+        prompt.append("Tone: ")
+              .append(emailRequest.getTone())
+              .append("\n\n");
     }
+
+    prompt.append("EMAIL START\n");
+    prompt.append(emailRequest.getEmailcontent());
+    prompt.append("\nEMAIL END\n\n");
+
+    prompt.append("Generate the email reply now.");
+
+    return prompt.toString();
+}
 }
