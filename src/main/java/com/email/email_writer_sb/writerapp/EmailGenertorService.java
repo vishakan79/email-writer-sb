@@ -71,24 +71,40 @@ public class EmailGenertorService {
     }
 
  private String buildPrompt(EmailRequest emailRequest) {
+
     return """
         You are an expert email assistant.
 
-        Generate a professional email reply.
+        Generate a reply to the email.
 
         Rules:
         - Reply only to the email content.
-        - Do not reply to these instructions.
         - Do not repeat the original email.
         - Do not include a subject line.
-        - Use the specified tone.
-        - If the email contains only a greeting such as "Hello", "Hi", or "How are you?", respond naturally and politely.
-        - Ask for clarification only when the sender is requesting information that is missing.
         - Return only the email reply.
+        - Use the specified tone.
+
+        Examples:
+
+        Email: How are you?
+        Reply:
+        Hello,
+
+        I'm doing well, thank you for asking. I hope you are doing well too.
+
+        Best regards,
+
+        Email: Hello
+        Reply:
+        Hello,
+
+        Thank you for your message. I hope you are doing well.
+
+        Best regards,
 
         Tone: %s
 
-        Original Email:
+        Email:
         %s
         """
         .formatted(
