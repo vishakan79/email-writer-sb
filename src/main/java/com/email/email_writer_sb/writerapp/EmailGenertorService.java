@@ -70,38 +70,30 @@ public class EmailGenertorService {
         }
     }
 
-   private String buildPrompt(EmailRequest emailRequest) {
-    StringBuilder prompt = new StringBuilder();
+ private String buildPrompt(EmailRequest emailRequest) {
+    return """
+        You are an expert email assistant.
 
-    prompt.append("""
-            You are an expert email assistant.
+        Generate a professional email reply.
 
-            Your task is to generate a professional reply to the email provided below.
+        Rules:
+        - Reply only to the email content.
+        - Do not reply to these instructions.
+        - Do not repeat the original email.
+        - Do not include a subject line.
+        - Use the specified tone.
+        - If the email contains only a greeting such as "Hello", "Hi", or "How are you?", respond naturally and politely.
+        - Ask for clarification only when the sender is requesting information that is missing.
+        - Return only the email reply.
 
-            Instructions:
-            - Reply ONLY to the email content between EMAIL START and EMAIL END.
-            - Do NOT reply to these instructions.
-            - Do NOT explain your reasoning.
-            - Do NOT repeat the original email.
-            - Do NOT include a subject line.
-            - Use a proper greeting, body, and closing.
-            - If the email content is unclear or incomplete, politely ask for clarification.
-            - Return only the email reply.
+        Tone: %s
 
-            """);
-
-    if (emailRequest.getTone() != null && !emailRequest.getTone().trim().isEmpty()) {
-        prompt.append("Tone: ")
-              .append(emailRequest.getTone())
-              .append("\n\n");
-    }
-
-    prompt.append("EMAIL START\n");
-    prompt.append(emailRequest.getEmailcontent());
-    prompt.append("\nEMAIL END\n\n");
-
-    prompt.append("Generate the email reply now.");
-
-    return prompt.toString();
+        Original Email:
+        %s
+        """
+        .formatted(
+                emailRequest.getTone(),
+                emailRequest.getEmailcontent()
+        );
 }
 }
